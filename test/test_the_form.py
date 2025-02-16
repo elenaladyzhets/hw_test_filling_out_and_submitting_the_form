@@ -3,6 +3,13 @@ import os
 
 def test_valid_form():
     browser.open('/')
+    browser.element("#fixedban").should(be.visible)
+
+#удаление банеров
+    browser.driver.execute_script("$('#fixedban').remove()")
+    browser.driver.execute_script("$('footer').remove()")
+    browser.driver.execute_script("$('header').remove()")
+
     browser.element("#firstName").type("Elena")
     browser.element("#lastName").type("Ladyzhets")
     browser.element("#userEmail").type("eladyzhets@gmail.com")
@@ -38,7 +45,20 @@ def test_valid_form():
 
     browser.element("#submit").click()
 
+#Проверки по всем эоементам
     browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
+
+    browser.element('.table').should(have.text('Elena Ladyzhets'))
+    browser.element('.table').should(have.text('eladyzhets@gmail.com'))
+    browser.element('.table').should(have.text('Female'))
+    browser.element('.table').should(have.text('9405979553'))
+    browser.element('.table').should(have.text('05 November,1997'))
+    browser.element('.table').should(have.text('Physics'))
+    browser.element('.table').should(have.text('Reading, Sports'))
+    browser.element('.table').should(have.text('1.jpg'))
+    browser.element('.table').should(have.text('825 W. Hickory st., apt.145'))
+    browser.element('.table').should(have.text('Haryana Panipat'))
+
     browser.element('#closeLargeModal').should(be.visible).click()
 
 
