@@ -51,7 +51,7 @@ class RegistrationPage:
         browser.all('[for^=hobbies-checkbox]').element_by(have.text(value)).click()
 
     @staticmethod
-    def upload_avatar(file_name):
+    def upload_picture(file_name):
         browser.element('#uploadPicture').set_value(resource.path(file_name))
 
     @staticmethod
