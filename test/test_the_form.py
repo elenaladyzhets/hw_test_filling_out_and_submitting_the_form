@@ -16,7 +16,7 @@ def test_complete_and_submit_form():
     registration_page.select_hobby('Sports')
     registration_page.select_hobby('Reading')
     registration_page.select_hobby('Music')
-    registration_page.upload_avatar('1.jpg')
+    registration_page.upload_picture('1.jpg')
     registration_page.fill_address('825 W.Sycamore st.')
     registration_page.select_state('NCR')
     registration_page.select_city('Noida')
