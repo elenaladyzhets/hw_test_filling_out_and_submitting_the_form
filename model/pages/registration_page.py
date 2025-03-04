@@ -3,7 +3,7 @@ from selene import have, command, be
 from selene.support.shared import browser
 from data.users import User
 from model import resource
-from model.pages.re
+from model.resource import path
 
 
 class RegistrationPage:
@@ -38,10 +38,10 @@ class RegistrationPage:
         browser.element('[for^="hobbies-checkbox-2"]').click()
         browser.element('[for^="hobbies-checkbox-3"]').click()
 
+        print(resource.path(user.picture))
+        browser.element("#uploadPicture").set_value(resource.path(user.picture))
 
-        browser.element("#uploadPicture").type(resource.path(user.picture))
-
-        browser.element('#currentAddress').(image_path(user.picture))
+        browser.element('#currentAddress').type(user.address)
         browser.element('#state').click().all('[id^=react-select-1-option]').element_by(have.text(user.state)).click()
         browser.element('#city').click().all('[id^=react-select-3-option]').element_by(have.text(user.city)).click()
         browser.element('#submit').click()
