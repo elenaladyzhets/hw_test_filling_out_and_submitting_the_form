@@ -3,7 +3,6 @@ from selene import have, command, be
 from selene.support.shared import browser
 from data.users import User
 from model import resource
-from model.resource import path
 
 
 class RegistrationPage:
@@ -38,7 +37,6 @@ class RegistrationPage:
         browser.element('[for^="hobbies-checkbox-2"]').click()
         browser.element('[for^="hobbies-checkbox-3"]').click()
 
-        print(resource.path(user.picture))
         browser.element("#uploadPicture").set_value(resource.path(user.picture))
 
         browser.element('#currentAddress').type(user.address)
