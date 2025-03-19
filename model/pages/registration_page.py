@@ -1,8 +1,7 @@
-
+import os
 from selene import have, command, be
 from selene.support.shared import browser
 from data.users import User
-from model import resource
 
 
 class RegistrationPage:
@@ -25,6 +24,7 @@ class RegistrationPage:
         browser.element('#userNumber').type(user.phone_number)
 
         browser.element("#dateOfBirthInput").click()
+        browser.element(".react-datepicker__year-select").perform(command.js.scroll_into_view).click()
         browser.element(".react-datepicker").should(be.visible)
         browser.element(".react-datepicker__year-select").click().element(f'option[value="{user.date_of_birth.year}"]').click()
         browser.element(".react-datepicker__month-select").click()
@@ -37,23 +37,24 @@ class RegistrationPage:
         browser.element('[for^="hobbies-checkbox-2"]').click()
         browser.element('[for^="hobbies-checkbox-3"]').click()
 
-        browser.element("#uploadPicture").set_value(resource.path(user.picture))
+        browser.element("#uploadPicture").type(os.path.abspath('resources/1.jpg'))
 
         browser.element('#currentAddress').type(user.address)
-        browser.element('#state').click().all('[id^=react-select-1-option]').element_by(have.text(user.state)).click()
-        browser.element('#city').click().all('[id^=react-select-3-option]').element_by(have.text(user.city)).click()
+        browser.element('#state').click().all("#state div").element_by(have.exact_text(user.state)).click()
+
+        browser.element('#city').click().all("#city div").element_by(have.exact_text(user.city)).click()
         browser.element('#submit').click()
 
     @staticmethod
     def should_registered_user_with(user: User):
-        browser.element('.table-responsive').should(have.text(f'Student Name {user.first_name} {user.last_name}'))
-        browser.element('.table-responsive').should(have.text(f'Student Email {user.email}'))
-        browser.element('.table-responsive').should(have.text(f'Gender {user.gender}'))
-        browser.element('.table-responsive').should(have.text(f'Mobile {user.phone_number}'))
-        browser.element('.table-responsive').should(
-            have.text(f'Date of Birth {user.date_of_birth.year}.{user.date_of_birth.month}.{user.date_of_birth.day}'))
-        browser.element('.table-responsive').should(have.text(f'Subjects {user.subject1} {user.subject2}'))
-        browser.element('.table-responsive').should(have.text(f'Hobbies {user.hobby1} {user.hobby2} {user.hobby3}'))
-        browser.element('.table-responsive').should(have.text(f'Picture {user.picture}'))
-        browser.element('.table-responsive').should(have.text(f'Address {user.address}'))
-        browser.element('.table-responsive').should(have.text(f'State and City {user.state} {user.city}'))
+        browser.element('.table').all('td').even.should(have.texts(
+            f'{user.first_name} {user.last_name}',
+            user.email,
+            user.gender,
+            user.phone_number,
+            f'{user.date_of_birth.day} {user.date_of_birth.strftime("%B")},{user.date_of_birth.year}',
+            f'{user.subject1}, {user.subject2}',
+            f'{user.hobby1}, {user.hobby2}, {user.hobby3}',
+            user.picture,
+            user.address,
+            f'{user.state} {user.city}'.strip()))

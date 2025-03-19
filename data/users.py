@@ -30,7 +30,7 @@ user = User(
     date_of_birth=date(1997, 11, 15),
     subject1='Physics', subject2='Maths',
     hobby1='Sports', hobby2='Reading', hobby3='Music',
-    picture='1.png',
+    picture='1.jpg',
     address='825 W.Sycamore st.',
     state='NCR', city='Noida'
 )
