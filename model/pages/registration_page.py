@@ -2,6 +2,7 @@ import os
 from selene import have, command, be
 from selene.support.shared import browser
 from data.users import User
+from model.resource import path
 
 
 class RegistrationPage:
@@ -37,7 +38,7 @@ class RegistrationPage:
         browser.element('[for^="hobbies-checkbox-2"]').click()
         browser.element('[for^="hobbies-checkbox-3"]').click()
 
-        browser.element("#uploadPicture").type(os.path.abspath('resources/1.jpg'))
+        browser.element("#uploadPicture").set_value(path(user.picture))
 
         browser.element('#currentAddress').type(user.address)
         browser.element('#state').click().all("#state div").element_by(have.exact_text(user.state)).click()
