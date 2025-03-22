@@ -13,7 +13,7 @@ def load_env():
 
 
 @pytest.fixture(autouse=True)
-def setting_browser():
+def setup_browser():
     browser.config.base_url = 'https://demoqa.com'
     browser.config.window_height = 1080
     browser.config.window_width = 1920
@@ -44,6 +44,6 @@ def setting_browser():
     attach.add_screenshot(browser)
     attach.add_logs(browser)
     attach.add_html(browser)
-    attach.add_video(browser, selenoid_url)
+    attach.add_video(browser)
 
     browser.quit()
