@@ -11,5 +11,6 @@ def browser_settings():
    # driver_options.add_argument('--headless=new')
     browser.config.driver_options = driver_options
 
+
     yield
     browser.quit()
