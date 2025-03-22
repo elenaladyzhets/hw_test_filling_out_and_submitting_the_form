@@ -34,3 +34,6 @@ venv*/
 allure-results
 .allure/
 .env
+env/
+ENV/
+env.bak/
