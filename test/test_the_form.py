@@ -40,9 +40,3 @@ def test_valid_form():
 
     browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
     browser.element('#closeLargeModal').should(be.visible).click()
-
-
-
-
-
-
