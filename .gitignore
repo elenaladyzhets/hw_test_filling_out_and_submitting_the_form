@@ -29,8 +29,3 @@ __pycache__/
 # Environments
 .venv*
 venv*/
-
-#Allure
-allure-results
-.allure/
-.env
