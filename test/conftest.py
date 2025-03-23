@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 from utils import attach
 from dotenv import load_dotenv
 import os
+import warnings
+
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -14,6 +16,7 @@ def load_env():
 
 @pytest.fixture(autouse=True)
 def setup_browser():
+    warnings.filterwarnings("ignore", category=UserWarning, module="selenium.webdriver.remote.remote_connection")
     browser.config.base_url = 'https://demoqa.com'
     browser.config.window_height = 1080
     browser.config.window_width = 1920
@@ -32,10 +35,16 @@ def setup_browser():
     selenoid_pass = os.getenv("SELENOID_PASS")
     selenoid_url = os.getenv("SELENOID_URL")
 
-    options.capabilities.update(selenoid_capabilities)
+    if not all([selenoid_login, selenoid_pass, selenoid_url]):
+        raise ValueError("Не заданы переменные окружения SELENOID_LOGIN, SELENOID_PASS или SELENOID_URL")
+
+    executor_url = f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub"
+
     driver = webdriver.Remote(
-        command_executor=f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub",
-        options=options)
+        command_executor=executor_url,
+        options=options,
+        keep_alive=True
+    )
 
     browser.config.driver = driver
 
