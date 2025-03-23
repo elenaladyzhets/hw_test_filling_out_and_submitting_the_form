@@ -35,8 +35,6 @@ def setup_browser():
     selenoid_pass = os.getenv("SELENOID_PASS")
     selenoid_url = os.getenv("SELENOID_URL")
 
-    if not all([selenoid_login, selenoid_pass, selenoid_url]):
-        raise ValueError("Не заданы переменные окружения SELENOID_LOGIN, SELENOID_PASS или SELENOID_URL")
 
     executor_url = f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub"
 
