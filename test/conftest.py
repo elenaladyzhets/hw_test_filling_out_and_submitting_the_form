@@ -40,6 +40,13 @@ def setup_browser():
     password = os.getenv('PASSWORD')
     url = os.getenv('URL')
 
+    # Проверка значений переменных окружения
+    print(f"LOGIN: {login}, PASSWORD: {password}, URL: {url}")
+
+    # Проверьте, что URL не равен 'none'
+    if url == 'none':
+        raise ValueError("URL is not correctly set in the environment variables.")
+
     browser.config.driver = webdriver.Remote(
         command_executor=f"https://{login}:{password}@{url}/wd/hub",
         options=options)
