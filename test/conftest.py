@@ -1,25 +1,28 @@
-import pytest
+import pytest, os
 from selene import browser
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from utils import attach
 from dotenv import load_dotenv
-import os
 import warnings
 
 
-
 @pytest.fixture(scope="session", autouse=True)
-def load_env():
+def setup_env():
     load_dotenv()
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope='function', autouse=True)
 def setup_browser():
-    warnings.filterwarnings("ignore", category=UserWarning, module="selenium.webdriver.remote.remote_connection")
+    warnings.simplefilter("ignore", UserWarning)
+    warnings.simplefilter("ignore", PendingDeprecationWarning)
+
     browser.config.base_url = 'https://demoqa.com'
-    browser.config.window_height = 1080
+    driver_options = webdriver.ChromeOptions()
+    driver_options.page_load_strategy = 'eager'
+    browser.config.driver_options = driver_options
     browser.config.window_width = 1920
+    browser.config.window_height = 1080
 
     options = Options()
     selenoid_capabilities = {
@@ -31,22 +34,17 @@ def setup_browser():
         }
     }
 
-    selenoid_login = os.getenv("SELENOID_LOGIN")
-    selenoid_pass = os.getenv("SELENOID_PASS")
-    selenoid_url = os.getenv("SELENOID_URL")
+    options.capabilities.update(selenoid_capabilities)
 
+    login = os.getenv('LOGIN')
+    password = os.getenv('PASSWORD')
+    url = os.getenv('URL')
 
-    executor_url = f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub"
+    browser.config.driver = webdriver.Remote(
+        command_executor=f"https://{login}:{password}@{url}/wd/hub",
+        options=options)
 
-    driver = webdriver.Remote(
-        command_executor=executor_url,
-        options=options,
-        keep_alive=True
-    )
-
-    browser.config.driver = driver
-
-    yield
+    yield browser
 
     attach.add_screenshot(browser)
     attach.add_logs(browser)
